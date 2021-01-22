@@ -1,38 +1,71 @@
-.App {
-  text-align: center;
+* {
+  /* outline: 1px solid red; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+head,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+
+  background: #3a4750;
+  color: #eee;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+a {
+  color: goldenrod;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
+  margin-top: 10%;
+  width: 100%;
+
   display: flex;
-  flex-direction: column;
+  flex-flow: column;
   align-items: center;
+}
+
+.header {
+  margin: 32px;
+
+  display: flex;
+  flex-flow: column;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.inputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.file-input {
+  margin: 8px;
+}
+
+.pedal-down {
+  transition: all 0.05s linear;
+  margin: 8px;
+  padding: 8px;
+  border: 4px solid black;
+  background: darkgray;
+  color: black;
+}
+
+.pedal-up {
+  transition: all 0.05s linear;
+  margin: 8px;
+  padding: 8px;
+  border: 4px solid black;
+  background: white;
+  color: black;
+}
+
+.piano {
+  margin: 16px;
+  border: 4px solid black;
 }
