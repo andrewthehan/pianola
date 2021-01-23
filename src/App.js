@@ -11,7 +11,12 @@ import React, {
 } from "react";
 import { Piano as EtudePiano } from "react-etude-piano";
 import "./App.css";
-import { createContext, stepContext } from "./MidiUtils";
+import {
+  clearIntermediateContext,
+  createContext,
+  skipContext,
+  stepContext,
+} from "./MidiUtils";
 
 function App() {
   const [piano, setPiano] = useState();
@@ -115,6 +120,40 @@ function App() {
     );
   }
 
+  function renderMediaControls() {
+    if (midi == null) {
+      return;
+    }
+
+    function handleScrubChange(e) {
+      clearIntermediateContext(
+        context,
+        piano.keyUp.bind(piano),
+        piano.pedalUp.bind(piano),
+        setContext
+      );
+
+      const scrubIndex = parseInt(e.target.value);
+      skipContext(context, scrubIndex, setContext);
+    }
+
+    return (
+      <section className="media-controls">
+        <label>
+          {context.index}/{context.actions.length}
+        </label>
+        <input
+          type="range"
+          className="scrubber"
+          value={context.index}
+          min={0}
+          max={context.actions.length - 1}
+          onChange={handleScrubChange}
+        />
+      </section>
+    );
+  }
+
   function renderPiano() {
     return (
       <Fragment>
@@ -138,6 +177,7 @@ function App() {
       <Suspense fallback={<div>Loading...</div>}>
         {renderHeader()}
         {renderFileInput()}
+        {renderMediaControls()}
         {renderPiano()}
       </Suspense>
     </div>

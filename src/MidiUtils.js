@@ -1,4 +1,7 @@
 import { now } from "tone";
+import { theory } from "etude";
+
+const { Pitch } = theory;
 
 export const Action = Object.freeze({
   RELEASE_SUSTAIN_PEDAL: 0,
@@ -109,13 +112,13 @@ export function stepContext(
       case Action.PRESS_KEY:
         notes.forEach(({ name, midi, velocity }) => {
           pressedNotes.add(name);
-          pressKey({ midi, velocity });
+          pressKey({ name, midi, velocity });
         });
         break;
       case Action.RELEASE_KEY:
         notes.forEach(({ name, midi, velocity }) => {
           pressedNotes.delete(name);
-          releaseKey({ midi, velocity });
+          releaseKey({ name, midi, velocity });
         });
         break;
       case Action.PRESS_SUSTAIN_PEDAL:
@@ -131,13 +134,48 @@ export function stepContext(
     }
 
     setNextContext({
-      actions,
-      pressedNotes,
+      ...context,
       sustain: nextSustain,
       index: index + 1,
-      startTime,
     });
   }, (time - (now() - startTime)) * 1000);
 
   return () => clearTimeout(id);
+}
+
+export function clearIntermediateContext(
+  context,
+  releaseKey,
+  releasePedal,
+  setNextContext
+) {
+  const { pressedNotes, sustain } = context;
+  pressedNotes.forEach((name) =>
+    releaseKey({
+      name,
+      midi: Pitch.fromString(name).get().getProgramNumber(),
+    })
+  );
+  if (sustain) {
+    releasePedal();
+  }
+
+  pressedNotes.clear();
+
+  setNextContext({
+    ...context,
+    sustain: false,
+    index: -1,
+    startTime: now(),
+  });
+}
+
+export function skipContext(context, index, setNextContext) {
+  const { actions } = context;
+
+  setNextContext({
+    ...context,
+    startTime: now() - actions[index].time - 0.1,
+    index,
+  });
 }

@@ -47,6 +47,14 @@ a {
   margin: 8px;
 }
 
+.media-controls {
+  width: 512px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
 .pedal-down {
   transition: all 0.05s linear;
   margin: 8px;
