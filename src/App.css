@@ -48,7 +48,16 @@ a {
 }
 
 .media-controls {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.media-control {
+  margin: 8px;
   width: 512px;
+
   display: flex;
   flex-flow: column;
   justify-content: center;

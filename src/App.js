@@ -22,6 +22,7 @@ function App() {
   const [piano, setPiano] = useState();
   const [midi, setMidi] = useState();
   const [context, setContext] = useState(createContext(null));
+  const [volume, setVolume] = useState(1);
 
   const pressPitch = useCallback(
     (pitch) => {
@@ -70,13 +71,13 @@ function App() {
 
     return stepContext(
       context,
-      piano.keyDown.bind(piano),
-      piano.keyUp.bind(piano),
+      (key) => piano.keyDown({ ...key, velocity: key.velocity * volume }),
+      (key) => piano.keyUp({ ...key, velocity: key.velocity * volume }),
       piano.pedalDown.bind(piano),
       piano.pedalUp.bind(piano),
       setContext
     );
-  }, [piano, context]);
+  }, [piano, context, volume]);
 
   function renderHeader() {
     return (
@@ -128,7 +129,7 @@ function App() {
     function handleScrubChange(e) {
       clearIntermediateContext(
         context,
-        piano.keyUp.bind(piano),
+        (key) => piano.keyUp({ ...key, velocity: key.velocity * volume }),
         piano.pedalUp.bind(piano),
         setContext
       );
@@ -137,19 +138,38 @@ function App() {
       skipContext(context, scrubIndex, setContext);
     }
 
+    function handleVolumeChange(e) {
+      const volume = parseFloat(e.target.value);
+      setVolume(volume);
+    }
+
     return (
       <section className="media-controls">
-        <label>
-          {context.index}/{context.actions.length}
-        </label>
-        <input
-          type="range"
-          className="scrubber"
-          value={context.index}
-          min={0}
-          max={context.actions.length - 1}
-          onChange={handleScrubChange}
-        />
+        <section className="media-control">
+          <label>
+            Progress: {context.index}/{context.actions.length}
+          </label>
+          <input
+            type="range"
+            className="scrubber"
+            value={context.index}
+            min={0}
+            max={context.actions.length - 1}
+            onChange={handleScrubChange}
+          />
+        </section>
+        <section className="media-control">
+          <label>Volume: {Math.round(volume * 100)}%</label>
+          <input
+            type="range"
+            className="volume"
+            value={volume}
+            min={0}
+            max={1}
+            step="any"
+            onChange={handleVolumeChange}
+          />
+        </section>
       </section>
     );
   }
