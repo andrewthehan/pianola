@@ -1,3 +1,5 @@
+import { FaPause } from "@react-icons/all-files/fa/FaPause";
+import { FaPlay } from "@react-icons/all-files/fa/FaPlay";
 import { Midi } from "@tonejs/midi";
 import { Piano as TonePiano } from "@tonejs/piano";
 import React, {
@@ -14,6 +16,7 @@ import "./App.css";
 import {
   clearIntermediateContext,
   createContext,
+  setContextPaused,
   skipContext,
   stepContext,
 } from "./MidiUtils";
@@ -81,7 +84,7 @@ function App() {
 
   function renderHeader() {
     return (
-      <header className="header">
+      <header className="header flex-column justify-center align-center">
         <h1>Pianola</h1>
         <span>
           <label>by </label>
@@ -109,7 +112,7 @@ function App() {
     }
 
     return (
-      <section className="inputs">
+      <section className="flex-column justify-center align-center">
         <label>Upload MIDI file:</label>
         <input
           className="file-input"
@@ -138,27 +141,38 @@ function App() {
       skipContext(context, scrubIndex, setContext);
     }
 
+    function handlePlaybackButton() {
+      setContextPaused(context, !context.paused, setContext);
+    }
+
     function handleVolumeChange(e) {
       const volume = parseFloat(e.target.value);
       setVolume(volume);
     }
 
     return (
-      <section className="media-controls">
-        <section className="media-control">
-          <label>
-            Progress: {context.index}/{context.actions.length}
-          </label>
-          <input
-            type="range"
-            className="scrubber"
-            value={context.index}
-            min={0}
-            max={context.actions.length - 1}
-            onChange={handleScrubChange}
-          />
+      <section className="flex-column justify-center align-stretch">
+        <section className="media-control flex-column justify-center align-stretch">
+          <section className="flex-row">
+            <button className="icon-button" onClick={handlePlaybackButton}>
+              {context.paused ? <FaPlay /> : <FaPause />}
+            </button>
+            <section className="flex-column justify-stretch flex">
+              <label>
+                Progress: {context.index}/{context.actions.length}
+              </label>
+              <input
+                type="range"
+                className="scrubber"
+                value={context.index}
+                min={0}
+                max={context.actions.length - 1}
+                onChange={handleScrubChange}
+              />
+            </section>
+          </section>
         </section>
-        <section className="media-control">
+        <section className="media-control flex-column justify-center align-stretch">
           <label>Volume: {Math.round(volume * 100)}%</label>
           <input
             type="range"
@@ -193,7 +207,7 @@ function App() {
   }
 
   return (
-    <div className="container">
+    <div className="container flex-column align-center">
       <Suspense fallback={<div>Loading...</div>}>
         {renderHeader()}
         {renderFileInput()}

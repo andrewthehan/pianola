@@ -84,6 +84,7 @@ export function createContext(midi) {
     sustain: false,
     index: 0,
     startTime: now(),
+    paused: false,
   };
 }
 
@@ -95,7 +96,11 @@ export function stepContext(
   releaseSustainPedal,
   setNextContext
 ) {
-  const { actions, pressedNotes, sustain, index, startTime } = context;
+  const { actions, pressedNotes, sustain, index, startTime, paused } = context;
+
+  if (paused) {
+    return;
+  }
 
   if (actions == null) {
     return;
@@ -177,5 +182,15 @@ export function skipContext(context, index, setNextContext) {
     ...context,
     startTime: now() - actions[index].time - 0.1,
     index,
+  });
+}
+
+export function setContextPaused(context, paused, setNextContext) {
+  const { actions, index } = context;
+
+  setNextContext({
+    ...context,
+    startTime: now() - actions[index].time - 0.1,
+    paused,
   });
 }

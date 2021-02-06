@@ -19,49 +19,65 @@ a {
   color: goldenrod;
 }
 
+.icon-button {
+  padding: 0;
+  border: none;
+  border-radius: 16%;
+  width: 32px;
+  height: 32px;
+  margin: 8px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-row {
+  display: flex;
+  flex-flow: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-flow: column;
+}
+
+.flex {
+  flex: 1;
+}
+
+.justify-stretch {
+  justify-content: stretch;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-stretch {
+  align-items: stretch;
+}
+
+.align-center {
+  align-items: center;
+}
+
 .container {
   margin-top: 10%;
   width: 100%;
-
-  display: flex;
-  flex-flow: column;
-  align-items: center;
 }
 
 .header {
   margin: 32px;
-
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.inputs {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .file-input {
   margin: 8px;
 }
 
-.media-controls {
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: stretch;
-}
-
 .media-control {
   margin: 8px;
   width: 512px;
-
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: stretch;
 }
 
 .pedal-down {
